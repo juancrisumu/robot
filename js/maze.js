@@ -15,6 +15,7 @@ function Maze(width,height) {
 	this.endY			  = null;
 
 
+	this.directions = ["north","east","south","west"];
 	// Creating the array for the maze
 	this.spaces = [];
 
@@ -28,7 +29,7 @@ function Maze(width,height) {
 		for (y=1; y <= height; y += 1) {
 			// Will add one element to the array for each space in the column
 			// Add a text representation of the coordinates
-			this.spaces[x][y] = new MazeSpace();
+			this.spaces[x][y] = new MazeSpace(this.directions);
 		}
 	}
 }
@@ -36,22 +37,37 @@ function Maze(width,height) {
 // As classes doesn't exist, Defines prototype method setStart that will be available in all mazes
 // Robot will start outside of the maze but it will be easier to track it. So we set the start and orientation point
 Maze.prototype.setStart = function(x, y, orientation) {
-	this.startX = x;
-	this.startY = y;
-	this.startOrientation = orientation;
+	if (this.isInBounds(x, y) && this.isValidDirection(orientation)) {
+		this.startX = x;
+		this.startY = y;
+		this.startOrientation = orientation;
+		return true;
+	}
+	return false;
 }
 
 // Same logic to set the end point of the maze
 Maze.prototype.setEnd = function (x, y) {
+	if (!this.isInBounds(x, y)) {
+		return false;
+	}
 	this.endX = x;
 	this.endY = y;
 }
 
 Maze.prototype.setWall = function(x, y, direction) {
 	// Validation of size of maze to set walls and also the direction
-	if (x > 0 && x <= this.width && y > 0 && y <= this.height && ["north","east","south","west"].indexOf(direction) !== -1) {
+	if (this.isInBounds(x, y) && this.isValidDirection(direction)) {
 	this.spaces[x][y].setWall(direction);
 	return true;
 	}
 	return false;
+}
+
+Maze.prototype.isValidDirection = function(direction) {
+	return this.directions.indexOf(direction) !== -1;
+}
+
+Maze.prototype.isInBounds = function(x, y) {
+	return x > 0 && x <= this.width && y > 0 && y <= this.height;
 }
