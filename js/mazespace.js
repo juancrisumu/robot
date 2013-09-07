@@ -7,10 +7,6 @@ function MazeSpace(directions) {
 	for (i=0; i < directions.length; i += 1) {
 		this[directions[i]] = false;
 	}
-	this.north = false;
-	this.east = false;
-	this.south = false;
-	this.west = false;
 }
 
 // Function for creating the argument of the walls
