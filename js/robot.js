@@ -70,9 +70,10 @@ Robot.prototype.canMoveForward = function() {
 	return this.maze.canMove(this.x, this.y, this.orientation);
 }
 
-Robot.prototype.exitMaze = function() {
+Robot.prototype.exitMaze = function(steps) {
 	if (this.maze) {
-		while(this.x != this.maze.endX || this.y != this.maze.endY) {
+		while(steps != 0 && (this.x != this.maze.endX || this.y != this.maze.endY)) {
+			steps -= 1;
 			if (this.canMoveForward()) {
 				this.moveForward();
 				this.turnLeft();
